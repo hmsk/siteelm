@@ -1,6 +1,8 @@
 import fs from 'fs'
 import glob from 'glob'
 import {JSDOM, VirtualConsole} from 'jsdom'
+import { serializeToString } from 'xmlserializer'
+import { parseFragment } from 'parse5'
 import P from 'parsimmon'
 import yaml from 'js-yaml'
 import path from 'path'
@@ -33,7 +35,7 @@ class InvalidPreambleError extends ConvertError { name = 'Preamble' }
  * @param excludes which are excluded by indexing
  * @returns void
  */
-const jsToHtmlWith = (sourcePath: string, srcDir: string, elmcode: string, appjsPath: string, withDraft: boolean, autoReloader: boolean, excludes: string[]): string => {
+const jsToHtmlWith = (sourcePath: string, srcDir: string, elmcode: string, appjsPath: string, withDraft: boolean, autoReloader: boolean, headless: boolean, excludes: string[]): string => {
     try {
         // create flags
         const document = parseDocument(fs.readFileSync(sourcePath, 'utf-8'))
@@ -68,7 +70,11 @@ const jsToHtmlWith = (sourcePath: string, srcDir: string, elmcode: string, appjs
         if(ds.window.document.body.innerHTML === '') {
             return ''
         }
-        if(head) {
+        if (headless) {
+            const parsed = parseFragment(ds.window.document.querySelector('feed')?.outerHTML || '')
+            return "<?xml version='1.0' encoding='UTF-8' ?>\n" + serializeToString(parsed)
+        }
+        else if(head) {
             ds.window.document.querySelectorAll('style').forEach(x => {
                     const styleParent = x.parentNode
                     head.appendChild(x)

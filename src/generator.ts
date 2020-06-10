@@ -103,8 +103,10 @@ const convertOnlyContentFiles = (config: Config): void => {
 const savePathFor = (file: string, config: Config): string => {
     if (file === config.build.contents.index) {
         return path.join(config.build.dist_dir, 'index.html')
+    } else if (file == config.build.contents.feed) {
+        return path.join(config.build.dist_dir, 'feed.xml')
     } else {
-        const r = path.relative(config.build.contents.src_dir, file) 
+        const r = path.relative(config.build.contents.src_dir, file)
         const p = path.parse(r)
         return path.join(config.build.dist_dir, p.dir, p.name, 'index.html')
     }
@@ -122,7 +124,7 @@ const convertAndSave = (file: string, config: Config, elmcode: string, appjs: st
     console.log(`> ${file}`)
     const savePath = savePathFor(file, config)
     const draft = config.build.contents.draft || false
-    const html = jsToHtmlWith(file, config.build.contents.src_dir, elmcode, appjs, draft, autoReloader, config.build.contents.exclude || [])
+    const html = jsToHtmlWith(file, config.build.contents.src_dir, elmcode, appjs, draft, autoReloader, savePath.includes(".xml"), config.build.contents.exclude || [])
     if(html !== '') {
         // console.log(`< ${savePath}`)
         fs.ensureFileSync(savePath)

@@ -7,6 +7,7 @@ export interface Config {
         contents: {
             src_dir: string
             index: string
+            feed?: string
             exclude?: string[]
             draft?: boolean
         }
