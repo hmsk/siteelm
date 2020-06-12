@@ -21,7 +21,7 @@
     "url": "git://github.com/hmsk/siteelm.git"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/"
   },
   "homepage": "https://github.com/hmsk/siteelm",
   "scripts": {
@@ -32,7 +32,10 @@
     "elm",
     "static site generator"
   ],
-  "contributors": ["nikueater", "Kengo Hamasaki <k.hamasaki@gmail.com>"],
+  "contributors": [
+    "nikueater",
+    "Kengo Hamasaki <k.hamasaki@gmail.com>"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^3.0.2",

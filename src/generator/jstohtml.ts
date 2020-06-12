@@ -12,7 +12,7 @@ import {staticElmInitCode, dynamicElmInitCode, autoReloaderCode} from './snippet
 
 interface Preamble {
     module: string
-    url: string
+    path: string
     draft?: boolean
 }
 
@@ -139,21 +139,21 @@ const parsePreamble = (p: string, source: string, root: string, excludes: string
     if(typeof preamble.draft !== 'boolean') {
         preamble.draft = false
     }
-    if(preamble.url) {
-        throw new InvalidPreambleError("you can't use \"url\" at the top level")
+    if(preamble.path) {
+        throw new InvalidPreambleError("you can't use \"path\" at the top level")
     }
     let dir = path.dirname(root)
     let rel = path.relative(dir, source)
     let ext = path.extname(rel)
     let file = path.basename(rel, ext)
-    let url = path.join(path.dirname(rel), path.basename(rel, ext))
+    let preamblePath = path.join(path.dirname(rel), path.basename(rel, ext))
     if(file == 'index') {
-        url = path.dirname(rel)
+        preamblePath = path.dirname(rel)
     }
-    if(url == '.') {
-        url = ''
+    if(preamblePath == '.') {
+        preamblePath = ''
     }
-    preamble.url = `/${url}`
+    preamble.path = `/${preamblePath}`
     return parseYaml(preamble, source, root, excludes, processed)
 }
 
